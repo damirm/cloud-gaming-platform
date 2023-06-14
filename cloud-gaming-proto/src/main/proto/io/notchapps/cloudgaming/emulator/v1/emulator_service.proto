@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package io.notchapps.cloudgaming.emulator.v1;
+
+import "io/notchapps/cloudgaming/game/v1/game.proto";
+
+option java_multiple_files = false;
+option java_package = "io.notchapps.cloudgaming.proto.emulator";
+option java_outer_classname = "EmulatorProto";
+
+service EmulatorService {
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+  rpc ListAllocations(ListAllocationsRequest) returns (ListAllocationsResponse);
+  rpc UpdateAllocation(UpdateAllocationRequest) returns (Allocation);
+}
+
+message HeartbeatRequest {
+  string hostname = 1;
+  string address = 2;
+  SystemInfo system_info = 3;
+}
+
+message SystemInfo {
+  int64 cpu = 1;
+  int64 ram = 2;
+  int64 gpu = 3;
+  int64 storage = 4;
+}
+
+message HeartbeatResponse {}
+
+message Allocation {
+  string allocation_id = 1;
+  string hostname = 2;
+  string game_id = 3;
+  string container_image = 4;
+  game.v1.Game.Requirements game_requirements = 5;
+  game.v1.Game.EmulatorEngine emulator_engine = 6;
+
+  Status status = 7;
+  Metadata metadata = 8;
+
+  enum Status {
+    ALLOCATION_STATUS_UNSPECIFIED = 0;
+
+    QUEUED = 1;
+    RUNNING = 2;
+    STOPPING = 3;
+    CRASHED = 4;
+  }
+
+  message Metadata {
+    string remote_control_endpoint = 1;
+    string remote_screen_endpoint = 2;
+  }
+}
+
+message ListAllocationsRequest {
+  string hostname = 1;
+  int64 page_size = 2;
+  string page_token = 3;
+}
+
+message ListAllocationsResponse {
+  repeated Allocation allocations = 1;
+  string next_page_token = 2;
+}
+
+message UpdateAllocationRequest {
+  string allocation_id = 1;
+  Allocation.Status status = 2;
+  Allocation.Metadata metadata = 3;
+}

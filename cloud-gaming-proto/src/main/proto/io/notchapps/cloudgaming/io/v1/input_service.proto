@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package io.notchapps.cloudgaming.io.v1;
+
+option java_multiple_files = false;
+option java_package = "io.notchapps.cloudgaming.proto.io";
+option java_outer_classname = "InputServiceProto";
+
+service InputService {
+  rpc Handle(stream InputEvent) returns (InputResponse);
+}
+
+message Coordinates {
+  int64 x = 1;
+  int64 y = 2;
+}
+
+message InputEvent {
+  string session_id = 1;
+
+  oneof event {
+    KeyboardEvent keyboard_event = 2;
+    MouseEvent mouse_event = 3;
+  }
+}
+
+message KeyboardEvent {
+  Type type = 1;
+  int64 key_code = 2;
+
+  enum Type {
+    KEYBOARD_EVENT_TYPE_UNSPECIFIED = 0;
+    KEY_DOWN = 1;
+    KEY_UP = 2;
+  }
+}
+
+message MouseEvent {
+  Type type = 1;
+  int64 key_code = 2;
+  Coordinates coordinates = 3;
+
+  enum Type {
+    MOUSE_EVENT_TYPE_UNSPECIFIED = 0;
+    MOUSE_MOVE = 1;
+    MOUSE_DOWN = 2;
+    MOUSE_UP = 3;
+  }
+}
+
+message InputResponse {}

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.notchapps.cloudgaming.game.v1;
+
+import "io/notchapps/cloudgaming/operation/v1/operation.proto";
+import "io/notchapps/cloudgaming/game/v1/game.proto";
+
+option java_multiple_files = false;
+option java_package = "io.notchapps.cloudgaming.proto.game";
+option java_outer_classname = "GameServiceProto";
+
+service GameService {
+  rpc ListAvailableGames(ListAvailableGamesRequest) returns (ListAvailableGamesResponse);
+
+  // TODO: Operation has to be contains session_id to connect to io services.
+  rpc Run(RunGameRequest) returns (operation.v1.Operation);
+  rpc Stop(StopGameRequest) returns (operation.v1.Operation);
+}
+
+message RunGameRequest {
+  string game_id = 1;
+}
+
+message StopGameRequest {
+  string game_id = 2;
+}
+
+message ListAvailableGamesRequest {
+  int64 page_size = 1;
+  string page_token = 2;
+}
+
+message ListAvailableGamesResponse {
+  repeated game.v1.Game games = 1;
+  string next_page_token = 2;
+}

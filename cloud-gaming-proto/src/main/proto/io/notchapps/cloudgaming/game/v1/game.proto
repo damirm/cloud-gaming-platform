@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package io.notchapps.cloudgaming.game.v1;
+
+option java_multiple_files = false;
+option java_package = "io.notchapps.cloudgaming.proto.game";
+option java_outer_classname = "GameProto";
+
+message Game {
+  string id = 1;
+  string name = 2;
+
+  Requirements minimum_requirements = 3;
+  Requirements recommended_requirements = 4;
+
+  EmulatorEngine emulator_engine = 5;
+  string container_image = 6;
+
+  message Requirements {
+    int64 cpu = 1;
+    int64 ram = 2;
+    int64 gpu = 3;
+    int64 storage = 4;
+  }
+
+  enum EmulatorEngine {
+    GAME_EMULATOR_ENGINE_UNSPECIFIED = 0;
+    PROTON = 1;
+    ANDROID = 2;
+  }
+}

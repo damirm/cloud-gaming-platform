@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package io.notchapps.cloudgaming.operation.v1;
+
+import "io/notchapps/cloudgaming/operation/v1/operation.proto";
+
+option java_multiple_files = false;
+option java_package = "io.notchapps.cloudgaming.proto.operation";
+option java_outer_classname = "OperationServiceProto";
+
+service OperationService {
+  rpc Get(GetOperationRequest) returns (operation.v1.Operation);
+}
+
+message GetOperationRequest {
+  string operation_id = 1;
+}
